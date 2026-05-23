@@ -1,0 +1,34 @@
+# Credentials and secrets
+integrations/pila.conf
+*.conf.bak
+
+# License system (never in repo)
+pila_licenses.db
+pila_licenses.db-shm
+pila_licenses.db-wal
+.pila_license_secret
+pila-license/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+*.egg-info/
+
+# Runtime
+*.pid
+*.log
+pila.log
+
+# Data (engagement persistence — user data)
+data/engagements.json
+
+# OS
+.DS_Store
+Thumbs.db
+*.bak
+*.v1_backup
+data/irv_jobs.json
+data/lmep_sessions.json

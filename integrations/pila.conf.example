@@ -1,0 +1,48 @@
+# ============================================================
+# PILA Suite — Integration Configuration
+# Copy this file to pila.conf and fill in your values.
+# NEVER commit pila.conf to git — it contains credentials.
+# ============================================================
+
+[elasticsearch]
+host     = 192.168.56.60
+port     = 9200
+username = elastic
+password = YOUR_ELASTIC_PASSWORD
+scheme   = https
+verify_ssl = false
+
+alert_indices   = filebeat-*,ntopng-*
+suricata_index  = filebeat-*
+zeek_index      = filebeat-*
+packetbeat_index = packetbeat-*
+
+detection_window_seconds = 120
+
+[suricata]
+host     = 192.168.56.102
+eve_path = /var/log/suricata/eve.json
+ssh_user =
+ssh_key  = ~/.ssh/id_rsa
+
+[zeek]
+host     = 192.168.56.102
+log_path = /var/log/zeek/
+ssh_user =
+ssh_key  = ~/.ssh/id_rsa
+
+[filebeat]
+host     = 192.168.56.102
+api_port = 5066
+
+[lmep]
+post_emulation_wait_seconds = 30
+min_suricata_severity = 3
+
+[irv]
+clean_window_minutes = 10
+
+[license]
+api_url = http://127.0.0.1:8001
+key     = YOUR_PILA_LICENSE_KEY
+product = pila_suite
