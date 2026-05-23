@@ -35,3 +35,4 @@ data/lmep_sessions.json
 platform/server.py
 platform/server.py.bak
 api/server.py.bak
+integrations/wazuh_api_additions.py
