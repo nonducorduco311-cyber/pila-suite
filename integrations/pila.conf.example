@@ -56,3 +56,12 @@ password   = YOUR_WAZUH_INDEXER_PASSWORD
 verify_ssl = false
 index      = wazuh-alerts-4.x-*
 min_level  = 3
+
+[winlogbeat]
+enabled    = true
+host       = 192.168.56.50
+port       = 9200
+username   = elastic
+password   = YOUR_ELASTIC_PASSWORD
+verify_ssl = false
+index      = winlogbeat-9.4.1
