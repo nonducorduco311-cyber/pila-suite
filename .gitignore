@@ -32,3 +32,6 @@ Thumbs.db
 *.v1_backup
 data/irv_jobs.json
 data/lmep_sessions.json
+platform/server.py
+platform/server.py.bak
+api/server.py.bak
