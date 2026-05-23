@@ -2,13 +2,15 @@
 
 **Purple Intelligence & Lifecycle Automation**
 
-A custom-built purple team platform that automates the full engagement lifecycle — from scenario planning through adversary emulation, incident validation, and quantitative scoring — in a single unified platform backed by live Elasticsearch telemetry.
+Purple team engagements produce detection data that lives in PowerPoint decks and PDF reports. It never gets structured, scored, or tracked over time. PILA Suite fixes that — a unified platform that automates the full purple team engagement lifecycle from scenario planning through adversary emulation, incident validation, and quantitative scoring, backed by live Elasticsearch telemetry from your production security stack.
+
+Deploy it in your SOC, your MSSP environment, your red team infrastructure, or your lab. PILA Suite connects to your existing Elasticsearch, Suricata, and Zeek stack and starts measuring what your detection program actually catches — and what it misses.
 
 ---
 
 ![ATT&CK Coverage Heatmap](docs/heatmap_screenshot.png)
 
-*Live ATT&CK coverage heatmap — green = detected, red = gap, grey = untested. Pulls from real Suricata/Zeek detection data via Elasticsearch.*
+*Live ATT&CK coverage heatmap — green = detected, red = gap, grey = untested. Pulls from real Suricata/Zeek detection data via your Elasticsearch stack.*
 
 ---
 
@@ -45,8 +47,9 @@ Community tier is free. Professional is $99/month — see [pilasuit.com](https:/
 ## Requirements
 
 - Python 3.11+
-- Elasticsearch 8.x (with Filebeat + Suricata shipping alerts)
-- A VirtualBox or physical lab environment — see [Lab Setup Guide](docs/lab_setup.md)
+- Elasticsearch 8.x with Filebeat shipping Suricata alerts
+- Suricata 6.x+ (or Zeek) monitoring your network segment
+- Linux host (Ubuntu 22.04/24.04 recommended) — bare metal, VM, or cloud instance
 
 ---
 
@@ -54,7 +57,7 @@ Community tier is free. Professional is $99/month — see [pilasuit.com](https:/
 
 ```bash
 # Clone
-git clone https://github.com/YOUR_GITHUB/pila-suite.git
+git clone https://github.com/nonducorduco311-cyber/pila-suite.git
 cd pila-suite
 
 # Configure
@@ -84,19 +87,18 @@ The script validates your key against the license server, writes it to `pila.con
 
 ---
 
-## Lab Architecture
+## Deployment
 
-PILA Suite is designed to run in an isolated lab environment. The reference lab uses five VMs:
+PILA Suite runs anywhere you have Python 3.11+ and an Elasticsearch 8.x instance receiving Suricata or Zeek data. Typical deployments:
 
-| VM | IP | Role |
-|----|----|------|
-| PILA Suite | 192.168.56.50 | Dashboard + API |
-| Elasticsearch | 192.168.56.60 | Alert data store |
-| ELK Stack | 192.168.56.102 | Filebeat + Suricata + Zeek |
-| Victim-Linux | 192.168.56.70 | SSH/Apache target |
-| Victim-Windows | 192.168.56.80 | RDP/SMB/WinRM target |
+| Environment | Description |
+|-------------|-------------|
+| **SOC / Enterprise** | Deploy on a dedicated Linux host inside your network. Point at your existing ELK stack. |
+| **MSSP** | Run one instance per client environment. Each connects to that client's Elasticsearch. |
+| **Red/Purple Team** | Deploy alongside your engagement infrastructure. Automate scoring and reporting across engagements. |
+| **Home Lab** | Run on bare metal or any hypervisor (Proxmox, VMware, VirtualBox). Full functionality on a single machine with 16GB+ RAM. |
 
-See the full [Lab Setup Guide](docs/lab_setup.md) for VirtualBox configuration, network setup, and snapshot strategy.
+**Minimum infrastructure:** PILA Suite + Elasticsearch + Filebeat + Suricata. Everything else (Zeek, Kibana, ElastAlert) is optional and additive.
 
 ---
 
@@ -225,4 +227,4 @@ pila-suite/
 
 Full platform features (ATT&CK heatmap, live ES correlation, report generation, IRV validation) require a Professional license.
 
-© 2026 GhostLab — PILA Suite v1.0.0
+© 2026 ByTE X Bit Technologies LLC — PILA Suite v1.0.0
