@@ -137,7 +137,7 @@ ES = (DE × 0.30) + (RS × 0.20) + (PR × 0.20) + (CB × 0.15) + (RQ × 0.15)
 | T1021.006 | Windows Remote Management | Community |
 | T1135 | Network Share Discovery | Community |
 | T1534 | Internal Spearphishing | Community |
-| T1550.002 | Pass-the-Hash (traffic shape) | Community |
+| T1550.002 | Pass-the-Hash (traffic shape) | Professional |
 
 ---
 
