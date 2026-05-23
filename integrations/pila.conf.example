@@ -46,3 +46,13 @@ clean_window_minutes = 10
 api_url = http://127.0.0.1:8001
 key     = YOUR_PILA_LICENSE_KEY
 product = pila_suite
+
+[wazuh]
+enabled    = true
+host       = 192.168.56.253
+port       = 9200
+username   = admin
+password   = YOUR_WAZUH_INDEXER_PASSWORD
+verify_ssl = false
+index      = wazuh-alerts-4.x-*
+min_level  = 3
