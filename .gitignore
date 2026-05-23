@@ -36,3 +36,11 @@ platform/server.py
 platform/server.py.bak
 api/server.py.bak
 integrations/wazuh_api_additions.py
+
+# Proprietary Professional Edition engines — never commit
+aesp/aesp_score/__init__.py
+lmep/lmep_core/__init__.py
+irv/irv_core/__init__.py
+integrations/elastic_client.py
+shared/license_check.py
+api/server.py
