@@ -42,6 +42,8 @@ Most purple team tooling handles one part of the workflow. PILA Suite handles th
 
 Community tier is free. Professional is $99/month — see [pilasuit.com](https://pilasuit.com) for licensing.
 
+> 📋 **[Full feature breakdown — FEATURES.md](FEATURES.md)** — detailed description of every Community and Professional capability.
+
 ---
 
 ## Requirements
