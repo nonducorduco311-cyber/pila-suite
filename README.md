@@ -105,7 +105,7 @@ PILA Suite runs anywhere you have Python 3.11+ and an Elasticsearch 8.x instance
 ## AESP Scoring Formula
 
 ```
-ES = (DE × 0.30) + (RS × 0.20) + (PR × 0.20) + (CB × 0.15) + (RQ × 0.15)
+The specific formula weights and DMT classification thresholds are proprietary to PILA Suite Professional (Patent Pending — © 2026 ByTE X Bit Technologies LLC).
 ```
 
 | Sub-Score | Weight | Measures |
@@ -130,13 +130,13 @@ ES = (DE × 0.30) + (RS × 0.20) + (PR × 0.20) + (CB × 0.15) + (RQ × 0.15)
 
 | Technique ID | Name | Tier |
 |-------------|------|------|
-| T1021.001 | Remote Services: RDP | Community |
-| T1021.002 | SMB/Windows Admin Shares | Community |
-| T1021.003 | DCOM Lateral Movement | Community |
-| T1021.004 | Remote Services: SSH | Community |
-| T1021.006 | Windows Remote Management | Community |
-| T1135 | Network Share Discovery | Community |
-| T1534 | Internal Spearphishing | Community |
+| T1021.001 | Remote Services: RDP | Professional |
+| T1021.002 | SMB/Windows Admin Shares | Professional |
+| T1021.003 | DCOM Lateral Movement | Professional |
+| T1021.004 | Remote Services: SSH | Professional |
+| T1021.006 | Windows Remote Management | Professional |
+| T1135 | Network Share Discovery | Professional |
+| T1534 | Internal Spearphishing | Professional |
 | T1550.002 | Pass-the-Hash (traffic shape) | Professional |
 
 ---
