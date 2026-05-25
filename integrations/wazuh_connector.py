@@ -41,7 +41,7 @@ class WazuhConfig:
 
         if not cfg.has_section("wazuh"):
             # Defaults
-            self.host       = "192.168.10.253"
+            self.host       = ""
             self.port       = 9200
             self.username   = "admin"
             self.password   = ""
@@ -52,7 +52,7 @@ class WazuhConfig:
             return
 
         w = cfg["wazuh"]
-        self.host       = w.get("host",       "192.168.10.253")
+        self.host       = w.get("host",       "")
         self.port       = int(w.get("port",   "9200"))
         self.username   = w.get("username",   "admin")
         self.password   = w.get("password",   "")
