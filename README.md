@@ -78,6 +78,18 @@ open http://localhost:8000/docs
 
 ---
 
+## Documentation
+
+| Document | Description | Access |
+|----------|-------------|--------|
+| [INSTALL.md](INSTALL.md) | Requirements, installation, systemd setup | Open source |
+| [USAGE.md](USAGE.md) | Community Edition usage, PSIL workflow, API reference | Open source |
+| [FAQ.md](FAQ.md) | 30+ questions — general, troubleshooting, licensing | Open source |
+| [FEATURES.md](FEATURES.md) | Full Community vs Professional breakdown | Open source |
+| Professional Setup Guide | LMEP, IRV, AESP, connectors, report generation | Paid customers |
+
+Professional Setup Guide delivered with license purchase at [byte-x-bit.com](https://byte-x-bit.com)
+
 ## Activating a Professional License
 
 ```bash
