@@ -27,7 +27,7 @@ def _load() -> configparser.ConfigParser:
 class ESConfig:
     def __init__(self):
         c = _load()["elasticsearch"]
-        self.host      = c.get("host", "192.168.10.172")
+        self.host      = c.get("host", "")
         self.port      = int(c.get("port", "9200"))
         self.username  = c.get("username", "elastic")
         self.password  = c.get("password", "")
@@ -47,7 +47,7 @@ class ESConfig:
 class SuricataConfig:
     def __init__(self):
         c = _load()["suricata"]
-        self.host     = c.get("host", "192.168.10.172")
+        self.host     = c.get("host", "")
         self.eve_path = c.get("eve_path", "/var/log/suricata/eve.json")
         self.ssh_user = c.get("ssh_user", "")
         self.ssh_key  = c.get("ssh_key", "~/.ssh/id_rsa")
@@ -56,7 +56,7 @@ class SuricataConfig:
 class ZeekConfig:
     def __init__(self):
         c = _load()["zeek"]
-        self.host     = c.get("host", "192.168.10.172")
+        self.host     = c.get("host", "")
         self.log_path = c.get("log_path", "/var/log/zeek/")
         self.ssh_user = c.get("ssh_user", "")
         self.ssh_key  = c.get("ssh_key", "~/.ssh/id_rsa")

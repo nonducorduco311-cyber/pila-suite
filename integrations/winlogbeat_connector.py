@@ -123,7 +123,7 @@ class WinlogbeatConfig:
         src = "winlogbeat" if cfg.has_section("winlogbeat") else "elasticsearch"
         s   = cfg[src] if cfg.has_section(src) else {}
 
-        self.host       = s.get("host",       "192.168.10.172")
+        self.host       = s.get("host",       "")
         self.port       = int(s.get("port",   "9200"))
         self.username   = s.get("username",   "elastic")
         self.password   = s.get("password",   "")
@@ -250,7 +250,7 @@ class WinlogbeatConnector:
                 count = data.get("count", 0)
                 # Check if Sysmon data is present
                 sysmon_query = json.dumps({
-                    "query": {"term": {"winlog.channel": "Microsoft-Windows-Sysmon/Operational"}}
+                    "query": {"term": {"winlog.channel.keyword": "Microsoft-Windows-Sysmon/Operational"}}
                 }).encode()
                 req2 = urllib.request.Request(
                     f"{self.cfg.url}/{self.cfg.index}/_count",
@@ -307,7 +307,7 @@ class WinlogbeatConnector:
         if username:
             must.append({"term": {"winlog.event_data.TargetUserName.keyword": username}})
         if channel:
-            must.append({"term": {"winlog.channel": channel}})
+            must.append({"term": {"winlog.channel.keyword": channel}})
         if outcome:
             must.append({"term": {"event.outcome": outcome}})
 

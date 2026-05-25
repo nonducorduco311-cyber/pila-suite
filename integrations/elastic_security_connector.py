@@ -47,7 +47,7 @@ class ElasticSecurityConfig:
         src = "elastic_security" if cfg.has_section("elastic_security") else "elasticsearch"
 
         if not cfg.has_section(src):
-            self.host       = "192.168.10.172"
+            self.host       = ""
             self.port       = 9200
             self.username   = "elastic"
             self.password   = ""
@@ -57,7 +57,7 @@ class ElasticSecurityConfig:
             return
 
         s = cfg[src]
-        self.host       = s.get("host",       "192.168.10.172")
+        self.host       = s.get("host",       "")
         self.port       = int(s.get("port",   "9200"))
         self.username   = s.get("username",   "elastic")
         self.password   = s.get("password",   "")
