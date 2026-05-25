@@ -184,3 +184,24 @@ Yes — connector contributions are welcome under Apache 2.0. See the connector 
 
 *© 2026 ByTE X Bit Technologies LLC — Patent Pending*
 *PILA Suite, PSIL, LMEP, IRV, and AESP are trademarks of ByTE X Bit Technologies LLC*
+
+---
+
+**How do I configure my detection source connections?**
+
+Open the PILA Suite dashboard and click the **⚙ Settings** tab. You can enter connection details for all supported connectors (Elasticsearch, Wazuh, Winlogbeat/Sysmon, Splunk, Suricata, Zeek) through the web interface without editing any config files. Click **Test** on each connector to verify connectivity before saving.
+
+Settings are saved to `integrations/pila.conf` and take effect after restarting PILA Suite.
+
+---
+
+**How do I manage my API key?**
+
+The Settings tab includes an API Key section showing your current key (masked). You can copy it to clipboard or regenerate a new key. If you regenerate, update any scripts or integrations using the old key — it stops working immediately.
+
+---
+
+**Why does the Zeek live view show question marks for IPs?**
+
+This happens when Filebeat is watching the wrong Zeek log path. Zeek writes live logs to its spool directory (typically `/opt/zeek-install/spool/zeek/`) not `/var/log/zeek/`. Update your Filebeat Zeek module config to point to the correct path and restart Filebeat.
+
