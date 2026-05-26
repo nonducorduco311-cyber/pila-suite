@@ -44,3 +44,18 @@ irv/irv_core/__init__.py
 integrations/elastic_client.py
 shared/license_check.py
 api/server.py
+
+# CODE Suite data — user data, never commit
+data/code/drift/events.json
+data/code/evidence/ledger.json
+data/code/observer/
+data/code/chain/
+
+# CODE Suite implementation — patent pending, commit after PPA filed
+modules/code/drift/drift_engine.py
+modules/code/drift/field_sampler.py
+modules/code/drift/rule_parser.py
+modules/code/chain/kcpg.py
+modules/code/chain/ces_engine.py
+modules/code/observer/enrichment.py
+modules/code/evidence/ledger.py
