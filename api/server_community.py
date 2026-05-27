@@ -375,6 +375,7 @@ def lmep_techniques():
 @app.post("/lmep/sessions")
 def lmep_sessions():
     _gate("lmep_full", "LMEP Emulation")
+    return {}
 
 @app.get("/irv/incident-types")
 def irv_incident_types():
@@ -391,6 +392,7 @@ def irv_incident_types():
 @app.post("/irv/jobs")
 def irv_jobs():
     _gate("irv_full", "IRV Validation")
+    return {}
 
 # ── GHOST read-only ───────────────────────────────────────────
 _GHOST_PATH = _DATA / "ghost" / "coverage_states.json"
@@ -466,10 +468,12 @@ def ghost_stats():
 @app.post("/ghost/sync")
 def ghost_sync():
     _gate("code_drift", "GHOST Sync")
+    return {}
 
 @app.post("/ghost/regression/check")
 def ghost_regression():
     _gate("code_drift", "GHOST Regression Check")
+    return {}
 
 # ── SENTINEL read-only ────────────────────────────────────────
 _SENTINEL_SCORES = _DATA / "sentinel" / "scores.json"
@@ -499,14 +503,17 @@ def sentinel_latest():
 @app.post("/sentinel/sync")
 def sentinel_sync():
     _gate("code_evidence", "SENTINEL Sync")
+    return {}
 
 @app.post("/sentinel/evidence/submit")
 def sentinel_submit():
     _gate("code_evidence", "SENTINEL Evidence Submission")
+    return {}
 
 @app.post("/sentinel/score")
 def sentinel_score():
     _gate("code_evidence", "SENTINEL Score Computation")
+    return {}
 
 # ── Dashboard pages ───────────────────────────────────────────
 @app.get("/", response_class=HTMLResponse)
