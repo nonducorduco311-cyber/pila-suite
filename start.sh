@@ -43,7 +43,14 @@ cd "$SCRIPT_DIR"
 if [ "$1" == "--foreground" ] || [ "$1" == "-f" ]; then
     python3 api/server.py
 else
-    nohup python3 -m uvicorn api.server:app \
+    # Use community server if professional server not present
+if [ -f "$SCRIPT_DIR/api/server.py" ]; then
+    SERVER="api.server:app"
+else
+    SERVER="api.server_community:app"
+    echo "→ Running Community Edition (no Professional server found)"
+fi
+nohup python3 -m uvicorn $SERVER \
         --host "$HOST" \
         --port "$PORT" \
         --log-level info \

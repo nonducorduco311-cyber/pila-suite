@@ -56,24 +56,24 @@ The response includes an `engagement_id` — save this for subsequent calls.
 
 ```bash
 curl -s -X POST http://localhost:8000/psil/engagements/YOUR_ENGAGEMENT_ID/scenarios \
+  -H "X-API-Key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "SSH Lateral Movement Test",
     "technique_id": "T1021.004",
     "tactic": "Lateral Movement",
-    "tool": "custom-ssh",
     "detected": true,
-    "outcome": "detected",
+    "outcome": "detected_not_blocked",
     "severity": "HIGH",
-    "gap_identified": false,
-    "detection_source": "Suricata",
-    "response_action": "Alert generated — no blocking"
+    "tools": ["custom-ssh"],
+    "detection_sources": ["suricata"],
+    "notes": "Alert generated — no blocking. Custom rule sid:9000001 fired."
   }' | python3 -m json.tool
 ```
 
-**Outcome values:** `detected` | `not_detected` | `prevented` | `detected_late`
+**Outcome values:** `detected_not_blocked` | `detected_and_blocked` | `not_detected` | `detected_late` | `partial_detection` | `prevented` | `false_positive_generated`
 
-**Severity values:** `CRITICAL` | `HIGH` | `MEDIUM` | `LOW` | `INFO`
+**Severity values:** `CRITICAL` | `HIGH` | `MEDIUM` | `LOW` | `INFORMATIONAL`
 
 ### List all engagements
 
@@ -174,7 +174,7 @@ The Swagger UI lists every endpoint with request/response schemas and a try-it i
 | ATT&CK coverage heatmap | — | ✓ |
 | Report generation | — | ✓ |
 
-Professional Edition: **$99/month** — license at **byte-x-bit.com**
+Professional Edition: **$149/month** — license at **byte-x-bit.com**
 
 ---
 
