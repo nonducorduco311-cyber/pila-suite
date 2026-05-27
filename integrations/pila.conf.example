@@ -4,64 +4,47 @@
 # NEVER commit pila.conf to git — it contains credentials.
 # ============================================================
 
+[api]
+# Master API key — generate a strong random key
+# Run: python3 -c "import secrets; print('pila-' + secrets.token_urlsafe(32))"
+api_key      = YOUR_MASTER_API_KEY_HERE
+require_auth = true
+
+[license]
+# License API URL — leave as default unless running license server elsewhere
+api_url = http://127.0.0.1:8001
+
 [elasticsearch]
-host     = 192.168.56.60
-port     = 9200
-username = elastic
-password = YOUR_ELASTIC_PASSWORD
-scheme   = https
+# Your Elasticsearch instance
+host       = YOUR_ELASTICSEARCH_IP
+port       = 9200
+username   = elastic
+password   = YOUR_ELASTIC_PASSWORD
+scheme     = https
 verify_ssl = false
 
-alert_indices   = filebeat-*,ntopng-*
-suricata_index  = filebeat-*
-zeek_index      = filebeat-*
-packetbeat_index = packetbeat-*
-
-detection_window_seconds = 120
+# Index patterns — adjust to match your Filebeat/ECS setup
+alert_indices            = filebeat-*
+suricata_index           = filebeat-*
+zeek_index               = filebeat-*
+packetbeat_index         = packetbeat-*
+detection_window_seconds = 86400
 
 [suricata]
-host     = 192.168.56.102
+# Optional: direct SSH access to Suricata host for rule management
+host     = YOUR_SURICATA_HOST_IP
 eve_path = /var/log/suricata/eve.json
 ssh_user =
 ssh_key  = ~/.ssh/id_rsa
 
 [zeek]
-host     = 192.168.56.102
+# Optional: Zeek log path
+host     = YOUR_ZEEK_HOST_IP
 log_path = /var/log/zeek/
-ssh_user =
-ssh_key  = ~/.ssh/id_rsa
 
-[filebeat]
-host     = 192.168.56.102
-api_port = 5066
-
-[lmep]
-post_emulation_wait_seconds = 30
-min_suricata_severity = 3
-
-[irv]
-clean_window_minutes = 10
-
-[license]
-api_url = http://127.0.0.1:8001
-key     = YOUR_PILA_LICENSE_KEY
-product = pila_suite
-
-[wazuh]
-enabled    = true
-host       = 192.168.56.253
-port       = 9200
-username   = admin
-password   = YOUR_WAZUH_INDEXER_PASSWORD
-verify_ssl = false
-index      = wazuh-alerts-4.x-*
-min_level  = 3
-
-[winlogbeat]
-enabled    = true
-host       = 192.168.56.50
-port       = 9200
-username   = elastic
-password   = YOUR_ELASTIC_PASSWORD
-verify_ssl = false
-index      = winlogbeat-9.4.1
+[observer]
+# CODE Suite — OBSERVER module API keys (Professional Edition)
+# AbuseIPDB: https://www.abuseipdb.com/account/api
+# VirusTotal: https://www.virustotal.com/gui/my-apikey
+abuseipdb_key  = YOUR_ABUSEIPDB_KEY_HERE
+virustotal_key = YOUR_VIRUSTOTAL_KEY_HERE

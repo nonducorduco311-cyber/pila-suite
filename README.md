@@ -8,13 +8,13 @@ Deploy it in your SOC, your MSSP environment, your red team infrastructure, or y
 
 ---
 
-![ATT&CK Coverage Heatmap](docs/heatmap_screenshot.png)
-
-*Live ATT&CK coverage heatmap — green = detected, red = gap, grey = untested. Pulls from real Suricata/Zeek detection data via your Elasticsearch stack.*
+> **Live ATT&CK coverage heatmap** — green = detected, red = gap, grey = untested. Pulls from real Suricata/Zeek detection data via your Elasticsearch stack. Screenshot available at [byte-x-bit.com](https://byte-x-bit.com).
 
 ---
 
 ## What It Does
+
+PILA Suite is the purple team core of the ByTE X Bit security platform. It ships with four integrated modules and connects to CODE Suite (blue team operations), GHOST (coverage regression tracking), and SENTINEL SCORE (vendor risk scoring) — all available with a Professional license.
 
 Most purple team tooling handles one part of the workflow. PILA Suite handles the whole thing:
 
@@ -40,7 +40,7 @@ Most purple team tooling handles one part of the workflow. PILA Suite handles th
 | AESP score history & trending | — | ✓ |
 | Report generation | — | ✓ |
 
-Community tier is free. Professional is $99/month — see [pilasuit.com](https://pilasuit.com) for licensing.
+Community tier is free. Professional is $149/month — see [byte-x-bit.com](https://byte-x-bit.com) for licensing.
 
 > 📋 **[Full feature breakdown — FEATURES.md](FEATURES.md)** — detailed description of every Community and Professional capability.
 
@@ -97,7 +97,7 @@ Professional Setup Guide delivered with license purchase at [byte-x-bit.com](htt
 python3 activate.py PILA-XXXX-XXXX-XXXX-XXXX
 ```
 
-The script validates your key against the license server, writes it to `pila.conf`, and restarts PILA Suite automatically. Purchase a license at [pilasuit.com](https://pilasuit.com).
+The script validates your key against the license server, writes it to `pila.conf`, and restarts PILA Suite automatically. Purchase a license at [byte-x-bit.com](https://byte-x-bit.com).
 
 ---
 

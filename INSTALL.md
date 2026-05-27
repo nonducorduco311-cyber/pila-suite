@@ -130,8 +130,13 @@ Expected output:
 ```json
 {
     "status": "ok",
-    "suite": "PILA Suite v1.0.0 — Community Edition",
-    "edition": "community"
+    "suite": "PILA Suite v1.0.0",
+    "components": {
+        "psil": "online",
+        "aesp": "online",
+        "irv": "online",
+        "lmep": "online"
+    }
 }
 ```
 
