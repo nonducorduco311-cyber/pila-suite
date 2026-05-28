@@ -1,244 +1,65 @@
-# PILA Suite v1.0.0
+# 📝 LocalNotion
 
-**Purple Intelligence & Lifecycle Automation**
+A self-hosted Notion-like workspace that runs entirely on your machine.
 
-Purple team engagements produce detection data that lives in PowerPoint decks and PDF reports. It never gets structured, scored, or tracked over time. PILA Suite fixes that — a unified platform that automates the full purple team engagement lifecycle from scenario planning through adversary emulation, incident validation, and quantitative scoring, backed by live Elasticsearch telemetry from your production security stack.
-
-Deploy it in your SOC, your MSSP environment, your red team infrastructure, or your lab. PILA Suite connects to your existing Elasticsearch, Suricata, and Zeek stack and starts measuring what your detection program actually catches — and what it misses.
-
----
-
-> **Live ATT&CK coverage heatmap** — green = detected, red = gap, grey = untested. Pulls from real Suricata/Zeek detection data via your Elasticsearch stack. Screenshot available at [byte-x-bit.com](https://byte-x-bit.com).
-
----
-
-## What It Does
-
-PILA Suite is the purple team core of the ByTE X Bit security platform. It ships with four integrated modules and connects to CODE Suite (blue team operations), GHOST (coverage regression tracking), and SENTINEL SCORE (vendor risk scoring) — all available with a Professional license.
-
-Most purple team tooling handles one part of the workflow. PILA Suite handles the whole thing:
-
-| Module | Full Name | What It Does |
-|--------|-----------|--------------|
-| **PSIL** | Purple Structured Intelligence Language | Structured engagement documentation with ATT&CK mappings, TLP markings, and machine-readable scenario capture |
-| **LMEP** | Lateral Movement Emulation Proxy | Safe behavioral technique emulation with live Elasticsearch correlation against your Suricata/Zeek stack |
-| **IRV** | Incident Remediation Validator | Post-remediation validation — queries live ES data to confirm hosts are clean before issuing cryptographically signed evidence bundles |
-| **AESP** | Attack Effectiveness Scoring Platform | Quantitative scoring (ES 0–100, DMT-1 through DMT-5) derived from real detection outcomes |
+## Features
+- 📄 Unlimited pages with nested subpages
+- ✏️ Rich block editor (headings, bullets, todos, code, callouts, quotes, dividers)
+- ⊞ Inline databases / tables with custom columns (text, number, select, checkbox)
+- 🖱️ Drag & drop to reorder blocks and pages
+- 🌙 Dark & light themes
+- 💾 All data persisted in a local SQLite database (`instance/notion.db`)
+- ⚡ `/` command menu to insert any block type
+- 🔢 Sidebar page tree with collapsible nesting
 
 ---
 
-## Community vs Professional
+## Setup
 
-| Feature | Community | Professional |
-|---------|-----------|--------------|
-| PSIL engagement creation | ✓ | ✓ |
-| AESP basic scoring | ✓ | ✓ |
-| ATT&CK heatmap | — | ✓ |
-| LMEP emulation (all techniques) | — | ✓ |
-| IRV incident validation | — | ✓ |
-| Live ES correlation | — | ✓ |
-| AESP score history & trending | — | ✓ |
-| Report generation | — | ✓ |
-
-Community tier is free. Professional is $149/month — see [byte-x-bit.com](https://byte-x-bit.com) for licensing.
-
-> 📋 **[Full feature breakdown — FEATURES.md](FEATURES.md)** — detailed description of every Community and Professional capability.
-
----
-
-## Requirements
-
-- Python 3.11+
-- Elasticsearch 8.x with Filebeat shipping Suricata alerts
-- Suricata 6.x+ (or Zeek) monitoring your network segment
-- Linux host (Ubuntu 22.04/24.04 recommended) — bare metal, VM, or cloud instance
-
----
-
-## Quick Start
+### 1. Install Python dependencies
 
 ```bash
-# Clone
-git clone https://github.com/nonducorduco311-cyber/pila-suite.git
-cd pila-suite
-
-# Configure
-cp integrations/pila.conf.example integrations/pila.conf
-nano integrations/pila.conf   # Add your ES credentials
-
-# Install and start
-./start.sh
-
-# Open dashboard
-open http://localhost:8000/
-
-# API docs
-open http://localhost:8000/docs
+cd notion-clone
+pip install -r requirements.txt
 ```
 
----
-
-## Documentation
-
-| Document | Description | Access |
-|----------|-------------|--------|
-| [INSTALL.md](INSTALL.md) | Requirements, installation, systemd setup | Open source |
-| [USAGE.md](USAGE.md) | Community Edition usage, PSIL workflow, API reference | Open source |
-| [FAQ.md](FAQ.md) | 30+ questions — general, troubleshooting, licensing | Open source |
-| [FEATURES.md](FEATURES.md) | Full Community vs Professional breakdown | Open source |
-| Professional Setup Guide | LMEP, IRV, AESP, connectors, report generation | Paid customers |
-
-Professional Setup Guide delivered with license purchase at [byte-x-bit.com](https://byte-x-bit.com)
-
-## Activating a Professional License
+### 2. Run the server
 
 ```bash
-# Run the activation script with your license key
-python3 activate.py PILA-XXXX-XXXX-XXXX-XXXX
+python app.py
 ```
 
-The script validates your key against the license server, writes it to `pila.conf`, and restarts PILA Suite automatically. Purchase a license at [byte-x-bit.com](https://byte-x-bit.com).
+### 3. Open in your browser
+
+Navigate to: **http://127.0.0.1:5000**
 
 ---
 
-## Deployment
-
-PILA Suite runs anywhere you have Python 3.11+ and an Elasticsearch 8.x instance receiving Suricata or Zeek data. Typical deployments:
-
-| Environment | Description |
-|-------------|-------------|
-| **SOC / Enterprise** | Deploy on a dedicated Linux host inside your network. Point at your existing ELK stack. |
-| **MSSP** | Run one instance per client environment. Each connects to that client's Elasticsearch. |
-| **Red/Purple Team** | Deploy alongside your engagement infrastructure. Automate scoring and reporting across engagements. |
-| **Home Lab** | Run on bare metal or any hypervisor (Proxmox, VMware, VirtualBox). Full functionality on a single machine with 16GB+ RAM. |
-
-**Minimum infrastructure:** PILA Suite + Elasticsearch + Filebeat + Suricata. Everything else (Zeek, Kibana, ElastAlert) is optional and additive.
-
----
-
-## AESP Scoring Formula
+## Project Layout
 
 ```
-The specific formula weights and DMT classification thresholds are proprietary to PILA Suite Professional (Patent Pending — © 2026 ByTE X Bit Technologies LLC).
+notion-clone/
+├── app.py              ← Flask backend + SQLite models
+├── requirements.txt
+├── instance/
+│   └── notion.db       ← Your data lives here (auto-created)
+├── templates/
+│   └── index.html
+└── static/
+    ├── css/style.css
+    └── js/app.js
 ```
 
-| Sub-Score | Weight | Measures |
-|-----------|--------|----------|
-| DE — Detection Efficacy | 30% | Weighted detection rate by severity |
-| RS — Response Speed | 20% | MTTR vs. industry baseline |
-| PR — Prevention Rate | 20% | Fraction fully prevented/blocked |
-| CB — Coverage Breadth | 15% | ATT&CK tactic + technique coverage |
-| RQ — Remediation Quality | 15% | Verification status of gap closures |
+## Backup
 
-| DMT Tier | ES Range | Label |
-|----------|----------|-------|
-| DMT-5 | 85–100 | Optimized |
-| DMT-4 | 70–84 | Advanced |
-| DMT-3 | 55–69 | Defined |
-| DMT-2 | 40–54 | Developing |
-| DMT-1 | 0–39 | Reactive |
+Just copy `instance/notion.db` to back up all your pages and databases.
 
----
+## Keyboard Shortcuts
 
-## LMEP Techniques (v1.0)
-
-| Technique ID | Name | Tier |
-|-------------|------|------|
-| T1021.001 | Remote Services: RDP | Professional |
-| T1021.002 | SMB/Windows Admin Shares | Professional |
-| T1021.003 | DCOM Lateral Movement | Professional |
-| T1021.004 | Remote Services: SSH | Professional |
-| T1021.006 | Windows Remote Management | Professional |
-| T1135 | Network Share Discovery | Professional |
-| T1534 | Internal Spearphishing | Professional |
-| T1550.002 | Pass-the-Hash (traffic shape) | Professional |
-
----
-
-## LMEP Safety Guarantees
-
-1. **No Payload Execution** — behavioral signatures only; no real attack payloads
-2. **Passive by Default** — no packet injection without explicit SEMI_ACTIVE mode
-3. **Credential Isolation** — SYNTHETIC mode by default; no real credentials required
-4. **Full Audit Trail** — all emulation actions logged with timestamps and scope
-
----
-
-## Project Structure
-
-```
-pila-suite/
-├── api/
-│   └── server.py            # Unified FastAPI server + dashboard UI
-├── psil/psil_sdk/           # PSIL engagement data model + validator
-├── aesp/aesp_score/         # AESP scoring engine
-├── irv/irv_core/            # IRV orchestration + evidence packaging
-├── lmep/lmep_core/          # LMEP technique library + session management
-├── integrations/
-│   ├── elastic_client.py    # Elasticsearch query layer
-│   ├── config.py            # Config loader
-│   └── pila.conf.example    # Config template (copy to pila.conf)
-├── shared/
-│   └── license_check.py     # License validation client
-├── activate.py              # Customer license activation script
-├── start.sh                 # Start PILA Suite
-└── stop.sh                  # Stop PILA Suite
-```
-
----
-
-## API Reference
-
-### PSIL
-| Method | Path | Tier |
-|--------|------|------|
-| POST | `/psil/engagements` | Community |
-| GET | `/psil/engagements` | Community |
-| POST | `/psil/engagements/{id}/scenarios` | Community |
-| POST | `/psil/validate/{id}` | Community |
-
-### AESP
-| Method | Path | Tier |
-|--------|------|------|
-| POST | `/aesp/score` | Community |
-| GET | `/aesp/score/{id}` | Community |
-| GET | `/aesp/history/{id}` | Professional |
-
-### IRV
-| Method | Path | Tier |
-|--------|------|------|
-| POST | `/irv/validate` | Professional |
-| GET | `/irv/jobs` | Professional |
-| GET | `/irv/incident-types` | Community |
-
-### LMEP
-| Method | Path | Tier |
-|--------|------|------|
-| POST | `/lmep/sessions` | Professional |
-| POST | `/lmep/sessions/{id}/run` | Professional |
-| GET | `/lmep/techniques` | Community |
-
-### Integrations
-| Method | Path | Tier |
-|--------|------|------|
-| GET | `/integrations/status` | Community |
-| GET | `/integrations/suricata/alerts` | Professional |
-| GET | `/integrations/zeek/connections` | Professional |
-| POST | `/integrations/irv/host-check` | Professional |
-
-### Platform
-| Method | Path | Tier |
-|--------|------|------|
-| GET | `/health` | Community |
-| GET | `/license` | Community |
-| GET | `/docs` | Community |
-
----
-
-## License
-
-**Open Core** — PSIL SDK, AESP scoring engine, IRV core playbooks, and LMEP OSS technique library are Apache 2.0.
-
-Full platform features (ATT&CK heatmap, live ES correlation, report generation, IRV validation) require a Professional license.
-
-© 2026 ByTE X Bit Technologies LLC — PILA Suite v1.0.0
+| Key | Action |
+|-----|--------|
+| `/` | Open block-type command menu |
+| `Enter` | New block |
+| `Backspace` (empty block) | Delete block |
+| `↑ / ↓` | Navigate blocks or slash menu |
+| `Shift+Enter` | Line break inside a block |
