@@ -5,7 +5,7 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Status: Patent Pending](https://img.shields.io/badge/Status-Patent_Pending-orange.svg)](#patents--intellectual-property)
-[![Python: 3.11+](https://img.shields.io/badge/Python-3.11+-brightgreen.svg)](https://www.python.org/)
+[![Python: 3.10+](https://img.shields.io/badge/Python-3.10+-brightgreen.svg)](https://www.python.org/)
 
 The **ByTE X Bit Platform** is an integrated security automation platform from
 [ByTE X Bit Technologies LLC](https://byte-x-bit.com). It emulates attacks,
@@ -72,7 +72,7 @@ For the full product story with screenshots and pricing, see
 Minimum, to start the platform and explore the dashboards:
 
 - **Linux** (tested on Ubuntu 22.04 / 24.04, Debian 12)
-- **Python 3.11+**
+- **Python 3.10+**
 - ~500 MB disk, ~1 GB RAM for the platform itself
 
 To produce *live* scores against real telemetry, you also need a detection
@@ -93,36 +93,46 @@ dashboards work entirely from local JSON files (no external dependencies).
 
 ## Quickstart
 
-> **⚠ Known issue (v1.0.0):** `start.sh` currently calls `python3` directly
-> instead of activating the project's `venv/`. This causes
-> `ModuleNotFoundError` on a fresh clone if dependencies were installed
-> into a venv. See [Workaround](#known-issues) below. A fix is planned for
-> v1.0.1.
+Tested on a fresh Ubuntu 22.04 LTS server VM. Should work identically on
+Ubuntu 24.04 and Debian 12.
 
-### 1. Clone and set up
+### 1. Install prerequisites
+
+```bash
+sudo apt update
+sudo apt install -y python3 python3-venv python3-pip git lsof build-essential
+```
+
+### 2. Clone the repository
 
 ```bash
 git clone https://github.com/nonducorduco311-cyber/pila-suite.git
 cd pila-suite
+```
 
-# Create a virtual environment
+### 3. Set up a Python virtual environment
+
+```bash
 python3 -m venv venv
 source venv/bin/activate
-
-# Install dependencies
 pip install -r requirements.txt
 ```
 
-### 2. Start the platform
+### 4. Start the platform
 
 ```bash
-# Workaround for the known start.sh issue — run uvicorn directly from the venv:
-python -m uvicorn api.server:app --host 0.0.0.0 --port 8000
+./start.sh
 ```
 
-(Once the v1.0.1 fix lands, this becomes simply `./start.sh`.)
+### 5. Verify it's running
 
-### 3. Open the dashboard
+```bash
+curl http://localhost:8000/health
+```
+
+You should see a JSON response with `"status":"ok"`.
+
+### 6. Open the dashboard
 
 In your browser:
 
@@ -135,7 +145,7 @@ On first start, dashboards will be empty until you either:
 - Wire up an Elasticsearch / Suricata / Wazuh data source (see
   [Integrations](#integrations))
 
-### 4. Stop the platform
+### 7. Stop the platform
 
 ```bash
 ./stop.sh
@@ -210,18 +220,6 @@ repository.
 ---
 
 ## Known issues
-
-### `start.sh` does not activate the venv (v1.0.0)
-
-`start.sh` invokes `python3` directly. If you installed dependencies into
-a virtual environment (recommended), startup will fail with
-`ModuleNotFoundError: No module named 'elasticsearch'` or similar.
-
-**Workaround** (until v1.0.1):
-```bash
-source venv/bin/activate
-python -m uvicorn api.server:app --host 0.0.0.0 --port 8000
-```
 
 ### Empty dashboards on first start
 
