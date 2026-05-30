@@ -64,3 +64,39 @@ modules/code/evidence/ledger.py
 api/server.py.bak-*
 api/server_community.py.bak-*
 start.sh.bak-*
+
+# Additions from bxb_gitignore_apply (20260530-180332)
+# GHOST and SENTINEL modules — proprietary, never commit until Phase 3 patent review
+modules/ghost/
+modules/sentinel/
+
+# GHOST and SENTINEL runtime data
+data/ghost/
+data/sentinel/
+
+# Catch-all for timestamped backups
+*.bak-*
+.gitignore.bak-*
+
+# Environment & secrets (defense in depth)
+.env
+.env.*
+*.key
+*.pem
+secrets.json
+secrets.yml
+secrets.yaml
+
+# SSH keys (defense in depth)
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+*.ppk
+
+# IDE noise
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
