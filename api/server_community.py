@@ -31,8 +31,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # ── App ───────────────────────────────────────────────────────
 app = FastAPI(
-    title="PILA Suite — Community Edition",
-    description="Purple Intelligence & Lifecycle Automation",
+    title="ByTE X Bit Platform — Community Edition",
+    description="Integrated Purple & Blue Team Security Automation",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -161,7 +161,7 @@ psil_store = _psil_load()
 def health():
     return {
         "status": "ok",
-        "suite": "PILA Suite v1.0.0 — Community Edition",
+        "suite": "ByTE X Bit Platform v1.0.0 — Community Edition",
         "edition": "community",
         "components": {
             "psil": "online",
@@ -537,7 +537,7 @@ _PILA_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>PILA Suite — Community Edition</title>
+<title>ByTE X Bit Platform — Community Edition</title>
 <style>
   :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--accent:#2e86ab;
     --green:#3fb950;--red:#f85149;--yellow:#d29922;--text:#e6edf3;--muted:#8b949e}
