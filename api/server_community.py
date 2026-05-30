@@ -21,6 +21,7 @@ import json
 import configparser
 import hashlib
 import math
+import shutil
 from datetime import datetime, timezone
 from uuid import uuid4
 from pathlib import Path
@@ -154,6 +155,32 @@ def _psil_save(store: dict):
     _PSIL_PATH.write_text(
         json.dumps(list(store.values()), indent=2))
 
+def _bootstrap_demo_data_if_empty():
+    """If data/engagements.json does not exist, populate from demo/sample_data/.
+    Creates a marker file so the dashboard knows demo mode is active.
+    No-op if engagements.json already exists (user has real or prior data)."""
+    if _PSIL_PATH.exists():
+        return
+    demo_src = _BASE / "demo" / "sample_data" / "engagements.json"
+    if not demo_src.exists():
+        return
+    _PSIL_PATH.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(demo_src, _PSIL_PATH)
+    marker = _DATA / ".demo_loaded"
+    marker.write_text(datetime.now(timezone.utc).isoformat() + "\n")
+_bootstrap_demo_data_if_empty()
+def _is_demo_mode() -> bool:
+    """True iff data/.demo_loaded marker exists. Used by route handlers
+    to inject the Demo Mode banner."""
+    return (_DATA / ".demo_loaded").exists()
+
+DEMO_BANNER_HTML = (
+    '<div class="demo-mode-bar">'
+      '<span class="badge yellow">DEMO MODE</span>'
+      '<span style="color:var(--muted)">Showing synthetic data from a fictional SOC — '
+      'useful for evaluation, not real engagements.</span>'
+    '</div>'
+)
 psil_store = _psil_load()
 
 # ── Health ────────────────────────────────────────────────────
@@ -520,17 +547,23 @@ def sentinel_score():
 @app.get("/pila", response_class=HTMLResponse)
 def dashboard():
     key = _cfg.get("api", "api_key", fallback="") if _CONF.exists() else ""
-    return _PILA_HTML.replace("const API='';", f"const API='{key}';")
+    html = _PILA_HTML.replace("const API='';", f"const API='{key}';")
+    html = html.replace("<!-- DEMO_BANNER -->", DEMO_BANNER_HTML if _is_demo_mode() else "")
+    return html
 
 @app.get("/ghost", response_class=HTMLResponse)
 def ghost_page():
     key = _cfg.get("api", "api_key", fallback="") if _CONF.exists() else ""
-    return _GHOST_HTML.replace("const API='';", f"const API='{key}';")
+    html = _GHOST_HTML.replace("const API='';", f"const API='{key}';")
+    html = html.replace("<!-- DEMO_BANNER -->", DEMO_BANNER_HTML if _is_demo_mode() else "")
+    return html
 
 @app.get("/sentinel", response_class=HTMLResponse)
 def sentinel_page():
     key = _cfg.get("api", "api_key", fallback="") if _CONF.exists() else ""
-    return _SENTINEL_HTML.replace("const API='';", f"const API='{key}';")
+    html = _SENTINEL_HTML.replace("const API='';", f"const API='{key}';")
+    html = html.replace("<!-- DEMO_BANNER -->", DEMO_BANNER_HTML if _is_demo_mode() else "")
+    return html
 
 # ── Minimal dashboard HTML ────────────────────────────────────
 _PILA_HTML = """<!DOCTYPE html>
@@ -545,6 +578,7 @@ _PILA_HTML = """<!DOCTYPE html>
   body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px}
   header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;gap:16px}
   header h1{font-size:20px;font-weight:700;color:var(--accent)}
+  .demo-mode-bar{background:rgba(210,153,34,.15);border-bottom:1px solid rgba(210,153,34,.5);padding:8px 24px;font-size:12px;display:flex;align-items:center;gap:12px}
   .community-bar{background:rgba(210,153,34,.08);border-bottom:1px solid rgba(210,153,34,.3);padding:8px 24px;font-size:12px;display:flex;align-items:center;gap:12px}
   main{padding:24px;max-width:1200px;margin:0 auto}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px}
@@ -586,6 +620,7 @@ _PILA_HTML = """<!DOCTYPE html>
     <a href="/sentinel" class="suite-link">🔒 SENTINEL</a>
   </span>
 </header>
+<!-- DEMO_BANNER -->
 <div class="community-bar">
   <span class="badge yellow">COMMUNITY</span>
   <span style="color:var(--muted)">Free tier — PSIL + basic AESP included</span>
@@ -777,6 +812,7 @@ _GHOST_HTML = """<!DOCTYPE html>
   body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px}
   header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;gap:16px}
   header h1{font-size:20px;font-weight:700;color:var(--accent)}
+  .demo-mode-bar{background:rgba(210,153,34,.15);border-bottom:1px solid rgba(210,153,34,.5);padding:8px 24px;font-size:12px;display:flex;align-items:center;gap:12px}
   .community-bar{background:rgba(210,153,34,.08);border-bottom:1px solid rgba(210,153,34,.3);padding:8px 24px;font-size:12px;display:flex;align-items:center;gap:12px}
   main{padding:24px;max-width:1200px;margin:0 auto}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px}
@@ -801,6 +837,7 @@ _GHOST_HTML = """<!DOCTYPE html>
     <a href="/sentinel" class="suite-link">🔒 SENTINEL</a>
   </span>
 </header>
+<!-- DEMO_BANNER -->
 <div class="community-bar">
   <span class="badge yellow">COMMUNITY</span>
   <span style="color:var(--muted)">Read-only coverage view</span>
@@ -860,6 +897,7 @@ _SENTINEL_HTML = """<!DOCTYPE html>
   body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px}
   header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;gap:16px}
   header h1{font-size:20px;font-weight:700;color:var(--accent)}
+  .demo-mode-bar{background:rgba(210,153,34,.15);border-bottom:1px solid rgba(210,153,34,.5);padding:8px 24px;font-size:12px;display:flex;align-items:center;gap:12px}
   .community-bar{background:rgba(210,153,34,.08);border-bottom:1px solid rgba(210,153,34,.3);padding:8px 24px;font-size:12px;display:flex;align-items:center;gap:12px}
   main{padding:24px;max-width:1200px;margin:0 auto}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px}
@@ -883,6 +921,7 @@ _SENTINEL_HTML = """<!DOCTYPE html>
     <a href="/ghost" class="suite-link">👻 GHOST</a>
   </span>
 </header>
+<!-- DEMO_BANNER -->
 <div class="community-bar">
   <span class="badge yellow">COMMUNITY</span>
   <span style="color:var(--muted)">Read-only score view</span>
