@@ -161,6 +161,8 @@ def _bootstrap_demo_data_if_empty():
     No-op if engagements.json already exists (user has real or prior data)."""
     if _PSIL_PATH.exists():
         return
+    if (_DATA / ".demo_dismissed").exists():
+        return  # user previously cleared demo; don't re-bootstrap
     demo_src = _BASE / "demo" / "sample_data" / "engagements.json"
     if not demo_src.exists():
         return
@@ -206,6 +208,9 @@ def clear_demo_data():
     marker = _DATA / ".demo_loaded"
     if marker.exists():
         marker.unlink()
+    # Write dismissed marker so future restarts don't re-bootstrap demo data
+    dismissed = _DATA / ".demo_dismissed"
+    dismissed.write_text(datetime.now(timezone.utc).isoformat() + "\n")
     global psil_store
     psil_store = {}
     return {"status": "cleared", "message": "Demo data cleared."}
