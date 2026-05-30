@@ -28,7 +28,7 @@ In a real SOC you end up asking the same question every quarter: *can we
 actually prove our defenses work?* This platform exists to answer that with
 signed, defensible artifacts instead of dashboards and assertions. It was
 designed and built in a production-grade home lab running real Elasticsearch,
-Suricata, Zeek, Wazuh, and Sysmon telemetry — and dogfooded against live
+Suricata, Zeek, Wazuh, and Sysmon telemetry — and battle-tested against live
 attack emulation before it shipped.
 
 ## The four products
