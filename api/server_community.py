@@ -179,8 +179,36 @@ DEMO_BANNER_HTML = (
       '<span class="badge yellow">DEMO MODE</span>'
       '<span style="color:var(--muted)">Showing synthetic data from a fictional SOC — '
       'useful for evaluation, not real engagements.</span>'
+      '<a href="#" onclick="clearDemoData();return false;" '
+        'style="margin-left:auto;color:var(--yellow);font-size:12px">'
+        'Clear and start fresh \u2192</a>'
     '</div>'
+    '<script>'
+    'async function clearDemoData(){'
+    'if(!confirm("Clear all demo data? You will start with an empty platform."))return;'
+    'try{'
+    'const r=await fetch("/demo/clear",{method:"POST"});'
+    'if(r.ok){location.reload();}else{alert("Failed to clear demo data: "+r.status);}'
+    '}catch(e){alert("Network error: "+e.message);}'
+    '}'
+    '</script>'
 )
+
+@app.post("/demo/clear")
+def clear_demo_data():
+    """Clear demo data and exit demo mode. Refuses if not currently in
+    demo mode (protects against accidentally deleting real user data)."""
+    if not _is_demo_mode():
+        raise HTTPException(status_code=400, detail="Not in demo mode")
+    # Delete the engagements file and marker; reset in-memory store
+    if _PSIL_PATH.exists():
+        _PSIL_PATH.unlink()
+    marker = _DATA / ".demo_loaded"
+    if marker.exists():
+        marker.unlink()
+    global psil_store
+    psil_store = {}
+    return {"status": "cleared", "message": "Demo data cleared."}
 psil_store = _psil_load()
 
 # ── Health ────────────────────────────────────────────────────
