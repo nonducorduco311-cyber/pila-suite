@@ -153,6 +153,26 @@ On first start, dashboards will be empty until you either:
 
 ---
 
+## Demo mode
+
+A fresh install starts in **demo mode**: the platform auto-loads a synthetic
+dataset of five purple-team engagements so the dashboards have something to
+show on first run. A "DEMO MODE" banner appears across the top of every
+page to make the synthetic data unmistakable.
+
+The dataset documents a fictional "Demo SOC (synthetic)" organization over
+six weeks, showing the detect → gap → remediate → validate cycle the
+platform is designed for. All IP addresses use the IANA documentation range
+(RFC 5737), so the demo cannot collide with anything real.
+
+When you're ready to start documenting your own engagements, click **Clear
+and start fresh** in the demo banner. This deletes the demo data, removes
+the banner, and gives you an empty platform to populate with your work.
+The clear action requires a browser confirmation and cannot run when the
+platform is not in demo mode (so it can never delete real user data).
+
+---
+
 ## Integrations
 
 The platform reads from your existing detection stack — it does not replace
@@ -216,16 +236,6 @@ ATT&CK heatmap, API write access, and ES integration. See
 
 The proprietary scoring algorithms and detection engines are not in this
 repository.
-
----
-
-## Known issues
-
-### Empty dashboards on first start
-
-This is expected. The platform reads persisted state from `data/*.json` and
-those files don't exist until you've run an engagement or wired up an
-Elasticsearch source. The dashboards will populate as you use the platform.
 
 ---
 
