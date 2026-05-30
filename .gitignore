@@ -59,3 +59,8 @@ modules/code/chain/kcpg.py
 modules/code/chain/ces_engine.py
 modules/code/observer/enrichment.py
 modules/code/evidence/ledger.py
+
+# Timestamped backups (added by bxb_gitignore_cleanup)
+api/server.py.bak-*
+api/server_community.py.bak-*
+start.sh.bak-*
