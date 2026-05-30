@@ -1,0 +1,313 @@
+[
+  {
+    "psil_version": "1.0.0",
+    "document_id": "75c5562e-17b9-5f52-a45e-711688d43e0b",
+    "created": "2026-04-16T14:00:00+00:00",
+    "modified": "2026-04-16T14:00:00+00:00",
+    "classification": "TLP:AMBER",
+    "engagement": {
+      "engagement_id": "f159f4f8-d3d6-5ec4-98a3-b85ccbd64c8d",
+      "name": "Demo: Onboarding \u2014 External Recon Baseline",
+      "organization": "Demo SOC (synthetic)",
+      "start_date": null,
+      "end_date": null,
+      "scope": [
+        "203.0.113.10",
+        "203.0.113.20"
+      ],
+      "team": [],
+      "frameworks": [],
+      "tags": [
+        "demo",
+        "onboarding",
+        "recon"
+      ],
+      "tlp_marking": "TLP:AMBER"
+    },
+    "scenarios": [
+      {
+        "scenario_id": "3a8d3989-07be-59ec-b369-ea2300118631",
+        "name": "Demo: Onboarding \u2014 External Recon Baseline - primary scenario",
+        "attack": {
+          "technique_id": "T1046",
+          "tactic": "Discovery"
+        },
+        "defense": {
+          "detected": true
+        },
+        "outcome": "detected_not_blocked",
+        "severity": "MEDIUM",
+        "gap_identified": false
+      },
+      {
+        "scenario_id": "18f2c6cf-2d27-5614-b0d8-1f1e3c20a33d",
+        "name": "Demo: Onboarding \u2014 External Recon Baseline - sub-scenario 2",
+        "attack": {
+          "technique_id": "T1046",
+          "tactic": "Discovery"
+        },
+        "defense": {
+          "detected": true
+        },
+        "outcome": "detected_not_blocked",
+        "severity": "MEDIUM",
+        "gap_identified": false
+      }
+    ],
+    "metrics": {
+      "total_scenarios": 2,
+      "detection_rate": 1.0,
+      "prevention_rate": 0.0,
+      "mean_time_to_detect_seconds": 42,
+      "mean_time_to_respond_seconds": 180,
+      "gaps_identified": 0,
+      "remediations_verified": 0,
+      "coverage_by_tactic": {
+        "Discovery": 1.0
+      }
+    }
+  },
+  {
+    "psil_version": "1.0.0",
+    "document_id": "4b7aca19-b478-583d-aaa8-73660d929f4e",
+    "created": "2026-04-23T14:00:00+00:00",
+    "modified": "2026-04-23T14:00:00+00:00",
+    "classification": "TLP:AMBER",
+    "engagement": {
+      "engagement_id": "7a5eb271-a945-5996-87cb-5106549cdb59",
+      "name": "Demo: Credential Access Drill \u2014 Hydra Brute Force",
+      "organization": "Demo SOC (synthetic)",
+      "start_date": null,
+      "end_date": null,
+      "scope": [
+        "203.0.113.50"
+      ],
+      "team": [],
+      "frameworks": [],
+      "tags": [
+        "demo",
+        "credential-access",
+        "brute-force"
+      ],
+      "tlp_marking": "TLP:AMBER"
+    },
+    "scenarios": [
+      {
+        "scenario_id": "6867c1af-bdc1-5a84-91a3-3a10c784e222",
+        "name": "Demo: Credential Access Drill \u2014 Hydra Brute Force - primary scenario",
+        "attack": {
+          "technique_id": "T1110",
+          "tactic": "Credential Access"
+        },
+        "defense": {
+          "detected": false
+        },
+        "outcome": "missed",
+        "severity": "HIGH",
+        "gap_identified": true
+      }
+    ],
+    "metrics": {
+      "total_scenarios": 1,
+      "detection_rate": 0.0,
+      "prevention_rate": 0.0,
+      "mean_time_to_detect_seconds": null,
+      "mean_time_to_respond_seconds": null,
+      "gaps_identified": 1,
+      "remediations_verified": 0,
+      "coverage_by_tactic": {
+        "Credential Access": 0.0
+      }
+    }
+  },
+  {
+    "psil_version": "1.0.0",
+    "document_id": "83b10f7d-755a-5e3b-96a1-26f250110ad6",
+    "created": "2026-04-30T14:00:00+00:00",
+    "modified": "2026-04-30T14:00:00+00:00",
+    "classification": "TLP:AMBER",
+    "engagement": {
+      "engagement_id": "b1b83a2d-02be-5f9a-92bd-7d6d1bf52793",
+      "name": "Demo: Lateral Movement Exercise \u2014 SMB Admin Shares",
+      "organization": "Demo SOC (synthetic)",
+      "start_date": null,
+      "end_date": null,
+      "scope": [
+        "203.0.113.50",
+        "203.0.113.60"
+      ],
+      "team": [],
+      "frameworks": [],
+      "tags": [
+        "demo",
+        "lateral-movement",
+        "smb"
+      ],
+      "tlp_marking": "TLP:AMBER"
+    },
+    "scenarios": [
+      {
+        "scenario_id": "cab5abfa-c282-5093-bc3a-a99c37a0d253",
+        "name": "Demo: Lateral Movement Exercise \u2014 SMB Admin Shares - primary scenario",
+        "attack": {
+          "technique_id": "T1021.002",
+          "tactic": "Lateral Movement"
+        },
+        "defense": {
+          "detected": true
+        },
+        "outcome": "detected_late",
+        "severity": "HIGH",
+        "gap_identified": false
+      }
+    ],
+    "metrics": {
+      "total_scenarios": 1,
+      "detection_rate": 1.0,
+      "prevention_rate": 0.0,
+      "mean_time_to_detect_seconds": 42,
+      "mean_time_to_respond_seconds": 180,
+      "gaps_identified": 0,
+      "remediations_verified": 0,
+      "coverage_by_tactic": {
+        "Lateral Movement": 1.0
+      }
+    }
+  },
+  {
+    "psil_version": "1.0.0",
+    "document_id": "2c9c22d3-b974-55a9-ae1f-0e2ad8e3a2b5",
+    "created": "2026-05-14T14:00:00+00:00",
+    "modified": "2026-05-14T14:00:00+00:00",
+    "classification": "TLP:AMBER",
+    "engagement": {
+      "engagement_id": "5501e8af-8694-5413-8667-ee70c790187e",
+      "name": "Demo: Remediation Re-Test \u2014 Credential Access (closed)",
+      "organization": "Demo SOC (synthetic)",
+      "start_date": null,
+      "end_date": null,
+      "scope": [
+        "203.0.113.50"
+      ],
+      "team": [],
+      "frameworks": [],
+      "tags": [
+        "demo",
+        "remediation",
+        "re-test"
+      ],
+      "tlp_marking": "TLP:AMBER"
+    },
+    "scenarios": [
+      {
+        "scenario_id": "9fc72203-8df2-5e42-bd72-573c82eba977",
+        "name": "Demo: Remediation Re-Test \u2014 Credential Access (closed) - primary scenario",
+        "attack": {
+          "technique_id": "T1110",
+          "tactic": "Credential Access"
+        },
+        "defense": {
+          "detected": true
+        },
+        "outcome": "detected_not_blocked",
+        "severity": "MEDIUM",
+        "gap_identified": false
+      }
+    ],
+    "metrics": {
+      "total_scenarios": 1,
+      "detection_rate": 1.0,
+      "prevention_rate": 0.0,
+      "mean_time_to_detect_seconds": 42,
+      "mean_time_to_respond_seconds": 180,
+      "gaps_identified": 0,
+      "remediations_verified": 0,
+      "coverage_by_tactic": {
+        "Credential Access": 1.0
+      }
+    }
+  },
+  {
+    "psil_version": "1.0.0",
+    "document_id": "222ad443-07a7-5707-8742-05ee2e1f8b70",
+    "created": "2026-05-21T14:00:00+00:00",
+    "modified": "2026-05-21T14:00:00+00:00",
+    "classification": "TLP:AMBER",
+    "engagement": {
+      "engagement_id": "4b2a603d-5d47-555e-8bd9-f4b723184254",
+      "name": "Demo: Quarterly Purple Team \u2014 Multi-Stage Intrusion",
+      "organization": "Demo SOC (synthetic)",
+      "start_date": null,
+      "end_date": null,
+      "scope": [
+        "203.0.113.10",
+        "203.0.113.50",
+        "203.0.113.60"
+      ],
+      "team": [],
+      "frameworks": [],
+      "tags": [
+        "demo",
+        "quarterly",
+        "powershell"
+      ],
+      "tlp_marking": "TLP:AMBER"
+    },
+    "scenarios": [
+      {
+        "scenario_id": "01092dcb-677a-5817-b946-254f07ad6525",
+        "name": "Demo: Quarterly Purple Team \u2014 Multi-Stage Intrusion - primary scenario",
+        "attack": {
+          "technique_id": "T1059.001",
+          "tactic": "Execution"
+        },
+        "defense": {
+          "detected": true
+        },
+        "outcome": "detected_not_blocked",
+        "severity": "MEDIUM",
+        "gap_identified": false
+      },
+      {
+        "scenario_id": "cd2d6c30-622b-502f-953d-8590a61d1b9c",
+        "name": "Demo: Quarterly Purple Team \u2014 Multi-Stage Intrusion - sub-scenario 2",
+        "attack": {
+          "technique_id": "T1059.001",
+          "tactic": "Execution"
+        },
+        "defense": {
+          "detected": true
+        },
+        "outcome": "detected_not_blocked",
+        "severity": "MEDIUM",
+        "gap_identified": false
+      },
+      {
+        "scenario_id": "11f129ce-3515-523b-9821-8edc95781803",
+        "name": "Demo: Quarterly Purple Team \u2014 Multi-Stage Intrusion - sub-scenario 3",
+        "attack": {
+          "technique_id": "T1059.001",
+          "tactic": "Execution"
+        },
+        "defense": {
+          "detected": true
+        },
+        "outcome": "detected_not_blocked",
+        "severity": "MEDIUM",
+        "gap_identified": false
+      }
+    ],
+    "metrics": {
+      "total_scenarios": 3,
+      "detection_rate": 1.0,
+      "prevention_rate": 0.0,
+      "mean_time_to_detect_seconds": 42,
+      "mean_time_to_respond_seconds": 180,
+      "gaps_identified": 0,
+      "remediations_verified": 0,
+      "coverage_by_tactic": {
+        "Execution": 1.0
+      }
+    }
+  }
+]
