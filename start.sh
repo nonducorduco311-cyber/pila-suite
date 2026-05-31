@@ -11,8 +11,8 @@ LOG="$SCRIPT_DIR/pila.log"
 VENV="$SCRIPT_DIR/venv"
 
 echo "================================================"
-echo "  PILA SUITE v1.0.0"
-echo "  PSIL  |  IRV  |  LMEP  |  AESP"
+echo "  ByTE X Bit Platform v1.0.0"
+echo "  PILA  |  GHOST  |  SENTINEL  |  CODE"
 echo "================================================"
 echo ""
 
