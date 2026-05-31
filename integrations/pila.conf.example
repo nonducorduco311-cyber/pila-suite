@@ -1,21 +1,28 @@
 # ============================================================
-# PILA Suite — Integration Configuration
+# ByTE X Bit Platform — Integration Configuration Template
+# ============================================================
 # Copy this file to pila.conf and fill in your values.
 # NEVER commit pila.conf to git — it contains credentials.
+#
+# Sections marked [Pro] are only used by Professional Edition.
+# Sections marked [Optional] can be omitted if not in use.
 # ============================================================
 
 [api]
-# Master API key — generate a strong random key
-# Run: python3 -c "import secrets; print('pila-' + secrets.token_urlsafe(32))"
+# Master API key — required for all requests when require_auth=true
+# Generate with: python3 -c "import secrets; print('pila-' + secrets.token_urlsafe(32))"
 api_key      = YOUR_MASTER_API_KEY_HERE
 require_auth = true
 
 [license]
-# License API URL — leave as default unless running license server elsewhere
+# [Pro] License key from byte-x-bit.com
+# Activate via: python3 activate.py YOUR_LICENSE_KEY_HERE
 api_url = http://127.0.0.1:8001
+key     = YOUR_LICENSE_KEY_HERE
+product = pila_suite
 
 [elasticsearch]
-# Your Elasticsearch instance
+# Your Elasticsearch instance (required)
 host       = YOUR_ELASTICSEARCH_IP
 port       = 9200
 username   = elastic
@@ -24,27 +31,91 @@ scheme     = https
 verify_ssl = false
 
 # Index patterns — adjust to match your Filebeat/ECS setup
-alert_indices            = filebeat-*
+alert_indices            = filebeat-*,packetbeat-*
 suricata_index           = filebeat-*
 zeek_index               = filebeat-*
 packetbeat_index         = packetbeat-*
-detection_window_seconds = 86400
+
+# How far back to search when correlating alerts (seconds)
+# 120 = aggressive (real-time emulation correlation)
+# 86400 = lookback for retrospective analysis
+detection_window_seconds = 120
 
 [suricata]
-# Optional: direct SSH access to Suricata host for rule management
+# Suricata host (typically same as PILA host if running locally)
 host     = YOUR_SURICATA_HOST_IP
 eve_path = /var/log/suricata/eve.json
 ssh_user =
 ssh_key  = ~/.ssh/id_rsa
 
 [zeek]
-# Optional: Zeek log path
+# [Optional] Zeek log paths
 host     = YOUR_ZEEK_HOST_IP
-log_path = /var/log/zeek/
+log_path = /opt/zeek-install/spool/zeek/
+ssh_user =
+ssh_key  = ~/.ssh/id_rsa
+
+[filebeat]
+# [Optional] Filebeat monitoring API
+host     = YOUR_FILEBEAT_HOST_IP
+api_port = 5066
+
+[wazuh]
+# [Optional] Wazuh HIDS integration — set enabled=true to activate
+enabled    = false
+host       = YOUR_WAZUH_HOST_IP
+port       = 9200
+username   = admin
+password   = YOUR_WAZUH_PASSWORD
+verify_ssl = false
+index      = wazuh-alerts-4.x-*
+min_level  = 3
+
+[winlogbeat]
+# [Optional] Windows Event Log via Winlogbeat — set enabled=true to activate
+# Password typically matches [elasticsearch] password if same cluster
+enabled    = false
+host       = YOUR_ELASTICSEARCH_IP
+port       = 9200
+username   = elastic
+password   = YOUR_ELASTIC_PASSWORD
+verify_ssl = false
+index      = winlogbeat-*
+
+[splunk]
+# [Optional] Splunk integration — set enabled=true to activate
+enabled    = false
+host       = YOUR_SPLUNK_HOST_IP
+port       = 8089
+username   = YOUR_SPLUNK_USERNAME
+password   = YOUR_SPLUNK_PASSWORD
+verify_ssl = false
+index      = main
+
+# HEC (HTTP Event Collector) for sending PILA events to Splunk
+hec_port  = 8088
+hec_token = YOUR_SPLUNK_HEC_TOKEN_HERE
+
+[lmep]
+# [Pro] LMEP emulation tuning
+post_emulation_wait_seconds = 30
+min_suricata_severity       = 3
+
+[irv]
+# [Pro] IRV validation tuning
+clean_window_minutes = 10
 
 [observer]
-# CODE Suite — OBSERVER module API keys (Professional Edition)
+# [Pro] CODE Suite — OBSERVER threat intelligence API keys
 # AbuseIPDB: https://www.abuseipdb.com/account/api
 # VirusTotal: https://www.virustotal.com/gui/my-apikey
 abuseipdb_key  = YOUR_ABUSEIPDB_KEY_HERE
 virustotal_key = YOUR_VIRUSTOTAL_KEY_HERE
+
+# ============================================================
+# Additional integrations
+# ============================================================
+# Add custom [section_name] blocks below for additional connectors
+# (custom SIEMs, threat intel feeds, ticketing systems, etc.)
+# Document each new section with a brief comment describing its purpose.
+# ============================================================

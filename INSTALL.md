@@ -1,7 +1,7 @@
 # PILA Suite — Installation Guide
 
 > **© 2026 ByTE X Bit Technologies LLC — Patent Pending**
-> Community Edition · Apache 2.0
+> Community Edition (Apache 2.0) and Professional Edition setup
 
 ---
 
@@ -86,7 +86,7 @@ password   = YOUR_ELASTIC_PASSWORD
 verify_ssl = false
 ```
 
-See `integrations/pila.conf.example` for the full reference with all optional sections (Wazuh, Winlogbeat, Elastic Security).
+See `integrations/pila.conf.example` for the configuration template structure. Additional integrations (Wazuh HIDS, Winlogbeat/Sysmon, Splunk) can be configured via the Settings page in the Pro dashboard after install.
 
 ---
 
@@ -178,7 +178,7 @@ After=network.target
 Type=simple
 User=YOUR_USERNAME
 WorkingDirectory=/path/to/pila-suite
-ExecStart=/path/to/pila-suite/venv/bin/python -m uvicorn api.server:app --host 0.0.0.0 --port 8000
+ExecStart=/path/to/pila-suite/start.sh --foreground
 Restart=on-failure
 RestartSec=5
 
@@ -207,9 +207,16 @@ pip install -r requirements.txt
 
 ## Professional Edition
 
-Community Edition includes the PSIL SDK, open connectors, and the REST API.
+**Community Edition** includes the PSIL SDK, basic AESP scoring, open connectors, the REST API, and a Demo Mode for evaluation.
 
-Professional Edition adds LMEP emulation, IRV validation, AESP scoring, and the ATT&CK heatmap. To activate a Professional license:
+**Professional Edition** adds three additional suites beyond PILA:
+- **GHOST** — gap analysis and operational simulation tracking
+- **SENTINEL** — security evidence scoring
+- **CODE Suite** — continuous detection engineering
+
+Plus full LMEP (real lateral movement emulation), IRV (incident remediation validation), full AESP scoring with ATT&CK Heatmap, and access to all Professional-tier APIs documented at `/docs`.
+
+To activate a Professional license:
 
 ```bash
 python3 activate.py PILA-XXXX-XXXX-XXXX-XXXX
