@@ -100,3 +100,10 @@ id_ed25519.pub
 *.swp
 *.swo
 *~
+
+# Pro Edition files deployed by deploy.sh into this install location
+# These are part of the proprietary Pro repo at ~/projects/pila-suite-pro/
+# and should never be committed to the public Community repo.
+shared/*
+!shared/__init__.py
+docs/scheduled-tasks.md
