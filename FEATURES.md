@@ -71,7 +71,7 @@ PSIL engagements are the input that feeds every other PILA module. They are also
 
 ---
 
-### Professional Edition — $99/month
+### Professional Edition — $149/month
 
 The Professional Edition delivers the full PILA Suite platform. It includes all Community features plus the four proprietary engines that power the platform's core value: automated emulation, live detection correlation, remediation validation, and quantitative scoring.
 
