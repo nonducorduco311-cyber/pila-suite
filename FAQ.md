@@ -59,7 +59,7 @@ The PSIL SDK (engagement documentation and validation), the detection connector 
 LMEP adversary emulation, live Elasticsearch correlation, AESP quantitative scoring (Effectiveness Score 0-100 and Defense Maturity Tier DMT-1 through DMT-5), IRV incident remediation validation, the ATT&CK coverage heatmap, and report generation.
 
 **How do I get a Professional license?**
-Visit **byte-x-bit.com** or email **bryant@byte-x-bit.com**. Professional Edition is $99/month. Beta access is available at no cost in exchange for practitioner feedback.
+Visit **byte-x-bit.com** or email **bryant@byte-x-bit.com**. Professional Edition is $149/month. Beta access is available at no cost in exchange for practitioner feedback.
 
 **How do I activate a Professional license?**
 ```bash
