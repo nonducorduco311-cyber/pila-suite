@@ -39,6 +39,7 @@ For Professional Edition features (LMEP emulation, IRV validation, AESP scoring,
 
 ```bash
 curl -s -X POST http://localhost:8000/psil/engagements \
+  -H "X-API-Key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Q3 Purple Team Exercise",

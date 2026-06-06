@@ -156,7 +156,7 @@ tail -f ~/pila-suite/pila.log
 ## Security and Privacy
 
 **Is the PILA Suite API authenticated?**
-Community Edition v1.0 does not require API authentication. It is designed for deployment on a trusted internal network. Do not expose port 8000 directly to the internet. API authentication is planned for v1.1.
+Community Edition includes an API authentication layer that can be enabled in `pila.conf`. The `pila.conf.example` template ships with `require_auth = true` and an `api_key` field — this is the recommended configuration for any non-trivial deployment. If `pila.conf` is absent entirely, authentication is disabled by default for ease of evaluation, but this is not recommended outside of local testing. Either way, do not expose port 8000 directly to the internet.
 
 **Does PILA Suite send any data externally?**
 PILA Suite only makes outbound connections to your configured Elasticsearch instance and to the license validation API (127.0.0.1:8001 by default). No telemetry or usage data is sent to ByTE X Bit Technologies.
