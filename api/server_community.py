@@ -61,7 +61,7 @@ _LICENSE_URL  = _cfg.get("license", "api_url", fallback="http://127.0.0.1:8001")
 
 # ── Community feature set ─────────────────────────────────────
 COMMUNITY_FEATURES = {
-    "psil_basic", "aesp_basic", "api_read",
+    "psil_basic", "aesp_basic", "api_read", "es_read",
 }
 
 PROFESSIONAL_FEATURES = {
@@ -735,6 +735,45 @@ _PILA_HTML = """<!DOCTYPE html>
     <tbody id="eng-table"></tbody>
   </table>
 </div>
+<div class="card">
+  <h2>⚡ Live Network — Detections <span class="badge green" style="margin-left:8px">FREE</span></h2>
+  <div id="es-status" style="font-size:12px;color:var(--muted);margin-bottom:10px">Connecting to Elasticsearch…</div>
+  <table>
+    <thead><tr><th>Time</th><th>Sev</th><th>Engine</th><th>Signature</th><th>Source → Dest</th></tr></thead>
+    <tbody id="es-table"><tr><td colspan="5" style="color:var(--muted)">Loading…</td></tr></tbody>
+  </table>
+  <div style="margin-top:10px;font-size:11px;color:var(--muted)">
+    Reading your live Suricata/Zeek detections — included free.
+    <span class="lock-label">🔒 Automated correlation against emulations &amp; full scoring → Professional</span>
+  </div>
+</div>
+<div class="card">
+  <h2>⚙ Settings — Data Source <span class="badge blue" style="margin-left:8px">FREE</span></h2>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Point PILA at your Elasticsearch to see live detections above. Reading is free.</p>
+  <div class="grid2">
+    <div>
+      <label>Elasticsearch Host</label>
+      <input id="cfg-host" placeholder="10.10.10.50">
+      <label>Port</label>
+      <input id="cfg-port" placeholder="9200">
+      <label>Username</label>
+      <input id="cfg-user" placeholder="elastic">
+    </div>
+    <div>
+      <label>Password <span id="cfg-pw-state" style="color:var(--muted)"></span></label>
+      <input id="cfg-pass" type="password" placeholder="leave blank to keep current">
+      <label>Alert Indices</label>
+      <input id="cfg-indices" placeholder="filebeat-*">
+      <label style="display:inline-flex;align-items:center;gap:6px;margin-top:14px">
+        <input type="checkbox" id="cfg-verify" style="width:auto"> Verify SSL
+      </label>
+    </div>
+  </div>
+  <div style="margin-top:12px;display:flex;gap:8px">
+    <button class="btn" onclick="saveSettings()">Save</button>
+    <button class="btn secondary" onclick="loadDetections()">Test Connection</button>
+  </div>
+</div>
 <div class="card pro-gate">
   <div style="font-size:32px;margin-bottom:8px">🔒</div>
   <h3 style="color:var(--yellow);font-size:14px">Professional Edition Features</h3>
@@ -787,6 +826,71 @@ async function loadEngagements(){
 
 function round1(n){return Math.round(n*10)/10}
 
+async function loadSettings(){
+  try{
+    const s=await (await fetch('/settings/es',{headers:{'X-API-Key':API}})).json();
+    document.getElementById('cfg-host').value=s.host||'';
+    document.getElementById('cfg-port').value=s.port||'9200';
+    document.getElementById('cfg-user').value=s.username||'elastic';
+    document.getElementById('cfg-indices').value=s.alert_indices||'filebeat-*';
+    document.getElementById('cfg-verify').checked=!!s.verify_ssl;
+    document.getElementById('cfg-pw-state').textContent=s.password_set?'(set — blank keeps it)':'(not set)';
+  }catch(e){console.error(e);}
+}
+async function saveSettings(){
+  const body={
+    host:document.getElementById('cfg-host').value.trim(),
+    port:document.getElementById('cfg-port').value.trim()||'9200',
+    username:document.getElementById('cfg-user').value.trim()||'elastic',
+    password:document.getElementById('cfg-pass').value,
+    alert_indices:document.getElementById('cfg-indices').value.trim()||'filebeat-*',
+    verify_ssl:document.getElementById('cfg-verify').checked,
+    scheme:'https'
+  };
+  if(!body.host){toast('Elasticsearch host required','error');return;}
+  try{
+    const r=await fetch('/settings/es',{method:'POST',headers:hdrs(),body:JSON.stringify(body)});
+    const d=await r.json();
+    if(d.ok){toast('Settings saved','success');document.getElementById('cfg-pass').value='';loadSettings();loadDetections();}
+    else{toast(d.detail||'Save failed','error');}
+  }catch(e){toast('Save failed: '+e,'error');}
+}
+
+function _sevBadge(sev){
+  if(sev===null||sev===undefined) return '<span class="badge gray">—</span>';
+  if(sev===1) return '<span class="badge" style="background:rgba(248,81,73,.15);color:var(--red)">HIGH</span>';
+  if(sev===2) return '<span class="badge yellow">MED</span>';
+  return '<span class="badge green">LOW</span>';
+}
+async function loadDetections(){
+  try{
+    const s=await (await fetch('/es/status',{headers:{'X-API-Key':API}})).json();
+    const st=document.getElementById('es-status');
+    if(s.connected){
+      st.innerHTML=`<span class="badge green">CONNECTED</span> cluster <strong>${h(s.cluster||'?')}</strong> · status ${h(s.status||'?')}`;
+    }else{
+      st.innerHTML=`<span class="badge" style="background:rgba(248,81,73,.15);color:var(--red)">OFFLINE</span> ${h(s.error||'unreachable')} — ${h(s.hint||'')}`;
+    }
+    const d=await (await fetch('/es/detections',{headers:{'X-API-Key':API}})).json();
+    const tb=document.getElementById('es-table');
+    if(!d.ok){tb.innerHTML=`<tr><td colspan="5" style="color:var(--red)">${h(d.error||'read failed')}</td></tr>`;return;}
+    if(!d.detections||!d.detections.length){tb.innerHTML='<tr><td colspan="5" style="color:var(--muted)">No detections in the current window.</td></tr>';return;}
+    tb.innerHTML=d.detections.map(x=>{
+      const t=(x.timestamp||'').split('T')[1]?.slice(0,8)||x.timestamp||'';
+      const dst=h(x.dst_ip||'')+(x.dst_port?(':'+x.dst_port):'');
+      return `<tr>
+        <td style="color:var(--muted);font-size:12px">${h(t)}</td>
+        <td>${_sevBadge(x.severity)}</td>
+        <td style="font-size:12px;color:var(--muted)">${h(x.engine||'')}</td>
+        <td><strong>${h(x.signature||'(unnamed)')}</strong>${x.category?`<div style="font-size:11px;color:var(--muted)">${h(x.category)}</div>`:''}</td>
+        <td style="font-size:12px">${h(x.src_ip||'?')} → ${dst||'?'}</td>
+      </tr>`;
+    }).join('');
+  }catch(e){
+    document.getElementById('es-status').innerHTML=`<span class="badge gray">—</span> ${h(String(e))}`;
+  }
+}
+
 async function createEngagement(){
   const name=document.getElementById('eng-name').value.trim();
   const org=document.getElementById('eng-org').value.trim();
@@ -799,7 +903,7 @@ async function createEngagement(){
   toast(`Engagement created: ${d.engagement.name}`,'success');
   document.getElementById('eng-name').value='';
   document.getElementById('eng-org').value='';
-  loadEngagements();
+  loadEngagements();loadSettings();loadDetections();setInterval(loadDetections,20000);
 }
 
 async function addScenario(){
@@ -1006,3 +1110,105 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run("api.server_community:app",
                 host="0.0.0.0", port=8000, reload=False)
+
+# ============================================================
+# Community Elasticsearch READ (free tier) — open-core aha
+# Reading detections is free; correlation/emulation/reporting are Professional.
+# ============================================================
+_ES_CFG = {
+    "host":       _cfg.get("elasticsearch", "host", fallback=""),
+    "port":       _cfg.getint("elasticsearch", "port", fallback=9200),
+    "username":   _cfg.get("elasticsearch", "username", fallback="elastic"),
+    "password":   _cfg.get("elasticsearch", "password", fallback=""),
+    "scheme":     _cfg.get("elasticsearch", "scheme", fallback="https"),
+    "verify_ssl": _cfg.get("elasticsearch", "verify_ssl",
+                           fallback="false").lower() == "true",
+}
+_ES_INDICES = _cfg.get("elasticsearch", "alert_indices",
+                       fallback="logs-*,so-*")
+_ES_WINDOW = _cfg.getint("elasticsearch", "detection_window_seconds",
+                         fallback=3600)
+
+def _es_client():
+    from integrations.es_read import ESReadClient
+    if not _ES_CFG["host"]:
+        raise HTTPException(503, {
+            "error": "es_not_configured",
+            "message": "Set [elasticsearch] host in integrations/pila.conf.",
+        })
+    return ESReadClient(**_ES_CFG)
+
+@app.get("/es/status")
+def es_status():
+    _gate("es_read", "Elasticsearch Connection")
+    return _es_client().ping()
+
+@app.get("/es/detections")
+def es_detections():
+    _gate("es_read", "Live Detections")
+    res = _es_client().recent_detections(
+        indices=_ES_INDICES, window_seconds=_ES_WINDOW, size=25)
+    if res.get("ok"):
+        res["note"] = ("Live detection read — free. Automated correlation "
+                       "against emulations, full AESP scoring, and report "
+                       "generation are Professional.")
+        res["upgrade_url"] = "https://byte-x-bit.com"
+    return res
+
+# ── Community Settings: configure Elasticsearch from the UI (free tier) ──
+import io as _io
+
+@app.get("/settings/es")
+def settings_es_get():
+    _gate("es_read", "Settings")
+    cp = configparser.ConfigParser()
+    cp.read(_CONF)
+    es = cp["elasticsearch"] if cp.has_section("elasticsearch") else {}
+    # NEVER return the password value — only whether one is set.
+    return {
+        "host": es.get("host", ""),
+        "port": es.get("port", "9200"),
+        "username": es.get("username", "elastic"),
+        "scheme": es.get("scheme", "https"),
+        "verify_ssl": es.get("verify_ssl", "false") == "true",
+        "alert_indices": es.get("alert_indices", "filebeat-*"),
+        "password_set": bool(es.get("password", "")),
+    }
+
+@app.post("/settings/es")
+def settings_es_post(payload: dict):
+    _gate("es_read", "Settings")
+    cp = configparser.ConfigParser()
+    cp.read(_CONF)
+    if not cp.has_section("elasticsearch"):
+        cp.add_section("elasticsearch")
+    es = cp["elasticsearch"]
+    es["host"]       = str(payload.get("host", "")).strip()
+    es["port"]       = str(payload.get("port", "9200")).strip()
+    es["username"]   = str(payload.get("username", "elastic")).strip()
+    es["scheme"]     = str(payload.get("scheme", "https")).strip()
+    es["verify_ssl"] = "true" if payload.get("verify_ssl") else "false"
+    es["alert_indices"] = str(payload.get("alert_indices", "filebeat-*")).strip()
+    pw = payload.get("password", "")
+    if pw:  # only overwrite when a new password is actually provided
+        es["password"] = pw
+    buf = _io.StringIO()
+    cp.write(buf)
+    _CONF.write_text(buf.getvalue())
+    try:
+        import os as _os
+        _os.chmod(_CONF, 0o600)
+    except Exception:
+        pass
+    # globals are read at import; tell the user a restart applies fully,
+    # but the /es/* routes read _ES_CFG live via _es_client(), so re-read here:
+    global _ES_CFG, _ES_INDICES
+    _ES_CFG = {
+        "host": es.get("host",""), "port": int(es.get("port",9200) or 9200),
+        "username": es.get("username","elastic"), "password": es.get("password",""),
+        "scheme": es.get("scheme","https"),
+        "verify_ssl": es.get("verify_ssl","false").lower()=="true",
+    }
+    _ES_INDICES = es.get("alert_indices","filebeat-*")
+    return {"ok": True, "message": "Elasticsearch settings saved.",
+            "password_set": bool(es.get("password",""))}
