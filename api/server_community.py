@@ -82,9 +82,13 @@ _request_features = _cv.ContextVar("request_features",
 
 def _validate_key(key: str) -> dict:
     """Validate API key — master key or license key."""
+    # Master key is a LOCAL AUTH convenience only — it grants Community
+    # features, never Professional. Professional tier comes exclusively from
+    # the license server's verified response below. The open build cannot
+    # manufacture a professional tier from a user-controlled pila.conf key.
     if key == _API_KEY and _API_KEY:
-        return {"valid": True, "tier": "professional",
-                "features": COMMUNITY_FEATURES | PROFESSIONAL_FEATURES,
+        return {"valid": True, "tier": "community",
+                "features": set(COMMUNITY_FEATURES),
                 "is_master": True}
     # Try license API
     try:
